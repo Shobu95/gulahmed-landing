@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gul Ahmed Landing — "Ideas Men Try On"
+
+A demo menswear landing page inspired by Gul Ahmed's **Ideas** brand, built to showcase AI virtual try-on on a real-feeling storefront.
+
+The page renders a product grid (unstitched fabric, waistcoats, suits) using live images from `gulahmedshop.com`, and lets a visitor upload their own photo, pick a garment, and generate an AI try-on image in a modal.
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org) 16 (App Router)
+- React 19 + TypeScript
+- Tailwind CSS 4
+- [`@gradio/client`](https://www.npmjs.com/package/@gradio/client) — calls a Hugging Face Space for the try-on generation
+
+## How Try-On Works
+
+`src/app/api/try-on/route.ts` is a single API route that:
+
+1. Accepts a human photo upload, a garment image URL, and a garment description
+2. Connects to the public Hugging Face Space [`yisol/IDM-VTON`](https://huggingface.co/spaces/yisol/IDM-VTON) via `@gradio/client`
+3. Returns the generated try-on image URL to the client
+
+No database or CMS — product data is hardcoded in `src/app/page.tsx`, and product images are hotlinked from `gulahmedshop.com`.
+
+## Project Structure
+
+```
+src/
+  app/
+    layout.tsx        # root layout, fonts, metadata
+    page.tsx           # hero, product grid, try-on modal (vanilla DOM scripting)
+    globals.css
+    api/
+      try-on/route.ts  # POST endpoint that proxies to the Hugging Face try-on Space
+```
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). No environment variables are required — the try-on API route talks to a public Hugging Face Space with no auth.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Run ESLint |
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This is a demo/prototype, not an official Gul Ahmed property — product imagery is pulled from the public Gul Ahmed shop CDN for demonstration purposes only.
